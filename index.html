@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breezo</title>
+    <link rel="icon" type="image/png" href="assets/Breezo.png">
+    <link rel="stylesheet" href="style.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+    <section class="container">
+        <main class="general_look">
+        </main>
+        <nav id="forcast_details" class="forcast_details">
+            <div class="resizeable_handle">
+                <i class="fa-solid fa-grip-lines"></i>
+            </div>
+
+            <div id="hourly_details">
+                <div id="air_quality">
+                    <h3><i class="fa-solid fa-wind"></i> Air Quality</h3>
+                    <p></p>
+                    <span>A measure will be here</span>
+                </div>
+                <div class="container">
+                    
+                </div>
+                <div class="container">
+                </div>
+            </div>
+            
+        </nav>
+        <div id="weather_details">
+        <header>
+            <i class="fa-solid fa-arrow-left"></i>
+            <h2>Weather</h2>
+        </header>
+        <main>
+            <input type="search" name="weather" id="weather" placeholder="Search for a city" maxlength="16" minlength="2">
+        </main>
+        <ul id="city_list">
+        </ul>
+        </div>
+        <footer>
+            <i class="fa-solid fa-location-dot update" style="color: #fafafa;"></i>
+            <i class="fa-solid fa-bars list" style="color: #fafafa;"></i>
+        </footer>
+    </section>
+    <script src="main.js" defer></script>
+</body>
+</html>
+
