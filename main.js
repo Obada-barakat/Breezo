@@ -15,6 +15,7 @@ function fetchWeather(city, country = "") {
         const weatherDescription = data.current.weather_descriptions[0];
         const isDay = data.current.is_day;
 
+        displayBackgroundColor(isDay);
         displayMainInfo(city, country, temperature, weatherDescription);
         displayAirQuality(data.current.air_quality);
         displayDetailsContainer(data);
@@ -57,22 +58,60 @@ if ("geolocation" in navigator) {
     console.log("Geolocation is not available in this browser")
 }
 
+// display background color
+function displayBackgroundColor(dayPhase) {
+    const mainPage = document.body;
+    const sidePage = document.querySelector('div#weather_details');
+
+    if (dayPhase == "yes") {
+        mainPage.style.backgroundColor = '#4A90E2';
+        sidePage.style.backgroundColor = '#4A90E2';
+    } else {
+        mainPage.style.backgroundColor = '#263238';
+        sidePage.style.backgroundColor = '#263238';
+    }
+}
+
+// get the weather icon
+function getWeatherIcon (weatherDescription) {
+        let weatherIcons = {
+        sunny: '<i class="fa-solid fa-sun"></i>',
+        cloudy: '<i class="fa-solid fa-cloud"></i>',
+        rainy: '<i class="fa-solid fa-cloud-rain"></i>',
+        'patchy rain nearby': '<i class="fa-solid fa-cloud-rain"></i>',
+        snowy: '<i class="fa-solid fa-snowflake"></i>',
+        'partly cloudy': '<i class="fa-solid fa-cloud-sun"></i>',
+        thunderstorm: '<i class="fa-solid fa-cloud-bolt"></i>',
+        'clear night': '<i class="fa-solid fa-moon"></i>',
+        'cloudy night': '<i class="fa-solid fa-cloud-moon"></i>',
+    }
+
+    let weatherIcon = weatherIcons[weatherDescription.toLowerCase().trim()] || "";
+    return weatherIcon;
+}
+
 // display main info
 function displayMainInfo (city, country, temperature, weatherDescription) {
     const mainInfo = document.querySelector('main.general_look');
+
     mainInfo.innerHTML = `
         <h2 class="location">${city}, ${country || ""}</h2>
             <p class="tempreature">
-                <span>${temperature}C</span>
-                <span>${weatherDescription}</span>
+                <span>${temperature}°C</span>
+                <span>${weatherDescription}  
+                    <span class='icon'>${getWeatherIcon(weatherDescription)}</span></span>
             </p>
-    `
+    `;
+    weatherDescription == "Sunny" ? document.querySelector('span.icon').classList.add('sunny') : document.querySelector('span.icon').classList.add('cloud-gray')
 }
 
 // display air quality
 function displayAirQuality (airQualityData) {
     const hourlyDetails = document.querySelector('div#hourly_details');
     const airQuality = hourlyDetails.querySelector('div#air_quality');
+    const measure = airQuality.querySelector('#measure');
+    const gauge = measure.querySelector('span');
+
     if (airQualityData["gb-defra-index"] < 3) {
         airQuality.querySelector('p').innerHTML = `${airQualityData["gb-defra-index"]}-Low Health Risk`;
     } else if (airQualityData["gb-defra-index"] > 3 && airQualityData["gb-defra-index"] < 7) {
@@ -80,12 +119,15 @@ function displayAirQuality (airQualityData) {
     } else {
         airQuality.querySelector('p').innerHTML = `${airQualityData["gb-defra-index"]}-High Health Risk`;
     }
+
+    gauge.style.left = `${airQualityData["gb-defra-index"]}0%`;
+
 }
 
 // display details container
 function displayDetailsContainer(data) {
-    document.querySelectorAll('div#hourly_details div.container')[0].innerHTML = "";
-    document.querySelectorAll('div#hourly_details div.container')[1].innerHTML = "";
+    document.querySelector('div#hourly_details div.container').innerHTML = "";
+
     const temperature = data.current.temperature;
     const details = {
         astro: data.current.astro,
@@ -96,7 +138,7 @@ function displayDetailsContainer(data) {
         feelsLike: data.current.feelslike,
     }
 
-    const detailsContainers = document.querySelectorAll('div#hourly_details div.container');
+    const detailsContainer = document.querySelector('div#hourly_details div.container');
     
     for (let info in details) {
         const section = document.createElement('section');
@@ -110,7 +152,7 @@ function displayDetailsContainer(data) {
                     <p>Sunset: ${astro.sunset}</p>
                 </div>
             `
-            detailsContainers[0].appendChild(section)
+            detailsContainer.appendChild(section)
         } else if (typeof details[info] == "object" && info == "wind") {
             section.id = info;
 
@@ -148,7 +190,7 @@ function displayDetailsContainer(data) {
                 </div>
                 <p>Wind Speed: ${details[info][1]} KM/H</p>
             `;
-            detailsContainers[0].appendChild(section)
+            detailsContainer.appendChild(section)
             document.querySelector('.arrow').style.transform = `rotate(${degrees}deg)`;
 
         } else if (info == "humidity") {
@@ -169,7 +211,7 @@ function displayDetailsContainer(data) {
                     <span>The dew point is ${calculateDewPoint(temperature, humidity).toFixed(2)} right now.</span>
                 </div>
             `
-            detailsContainers[0].appendChild(section);
+            detailsContainer.appendChild(section);
 
         } else if (info == "pressure") {
             const pressure = details[info];
@@ -187,7 +229,7 @@ function displayDetailsContainer(data) {
                     <span class="meassure" style="transform:rotate(${angle}deg) translateX(-50%)"></span>
                 </div>
             `;  
-            detailsContainers[0].childElementCount < 3 ? detailsContainers[0].appendChild(section) : detailsContainers[1].appendChild(section) ;
+            detailsContainer.appendChild(section);
         } else if (info == "visibility") {
             section.id = info;
             
@@ -198,7 +240,7 @@ function displayDetailsContainer(data) {
                     <span>${details[info] >= 10 ? "It's perfectly clear." : "The atmosphere is hazy."}</span>
                 </div>
             `
-            detailsContainers[0].childElementCount < 3 ? detailsContainers[0].appendChild(section) : detailsContainers[1].appendChild(section) ;
+            detailsContainer.appendChild(section);
         } else if (info == "feelsLike") {
             section.id = info;
             let description;
@@ -216,7 +258,7 @@ function displayDetailsContainer(data) {
                     <span>${description}</span>
                 </div>
             `
-                        detailsContainers[0].childElementCount < 3 ? detailsContainers[0].appendChild(section) : detailsContainers[1].appendChild(section);
+            detailsContainer.appendChild(section);
         }
         
         else {
@@ -227,38 +269,10 @@ function displayDetailsContainer(data) {
                     <span>${details[info]}</span>
                 </div>
             `
-            detailsContainers[0].childElementCount < 3 ? detailsContainers[0].appendChild(section) : detailsContainers[1].appendChild(section) ;
+            detailsContainer.appendChild(section);
         }
     }
 }
-
-
-// make the nav 
-const resizableElement = document.querySelector('nav#forcast_details')
-const handle = document.querySelector('.resizeable_handle');
-const minHeight = window.innerHeight * 0.14;
-const maxHeight = window.innerHeight;
-
-handle.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        
-        const initialHeight = resizableElement.offsetHeight;
-        const initalY = e.touches[0].clientY;
-        
-    
-        function touchMoving(e) {
-            let currentY = e.touches[0].clientY;
-            let newHeight = initialHeight - (currentY - initalY);
-            if (newHeight < minHeight) newHeight = minHeight;
-            if (newHeight > maxHeight) newHeight = maxHeight;
-            
-            resizableElement.style.height = newHeight + "px"
-        }
-    
-    
-        handle.addEventListener('touchmove', touchMoving)
-    })
-
 
 // making up the side page
 const goBackButton = document.querySelector('div#weather_details i');
@@ -334,7 +348,7 @@ function handleSearch(query) {
     
     const lowerQuery = query.toLowerCase();
     const fullCityList = JSON.parse(localStorage.getItem('countries_cities'));
-    const allCities = fullCityList.flatMap(obj => obj.cities);
+    const allCities = fullCityList.flatMap((obj) => (obj.cities));
 
     const matched = allCities.find(city => city.toLowerCase() == lowerQuery);
 
@@ -387,7 +401,7 @@ async function displayCities(list) {
             citiesList.appendChild(cityBox);
             setTimeout(() => {
                 cityBox.style.transform = 'translate(0)'
-            }, 800)
+            }, 300)
 
             cityBox.addEventListener('click', (e) => {
                 let selectedCity = cityBox.querySelector('h2').textContent;
@@ -396,15 +410,17 @@ async function displayCities(list) {
                 setTimeout(() => {
                     cityBox.classList.remove('clicked')
                 }, 300)
-
-            displayAnotherCity(selectedCity);
-        });
+                displayAnotherCity(selectedCity);
+            });
         })
     }
 }
 
 function displayAnotherCity(city) {
     fetchWeather(city);
+    setTimeout(() => {
+        page.classList.remove('show');
+    }, 500)
 }
 
 
@@ -415,7 +431,7 @@ let debounceTimer;
         debounceTimer = setTimeout(() => {
             const query = searchInput.value.trim();
                 handleSearch(query);
-        }, 1000)
+        }, 800)
 })
     
 

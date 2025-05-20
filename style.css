@@ -2,11 +2,15 @@
     --light-color: #8e92a8;
     --dark-color: #272448;
     --white-color: #ffffff;
-    --background-color: #250448;
-    --blur-background-color: #272048;
-    --blur-linear-background: linear-gradient(322deg,rgba(39, 32, 72, 0) 0%, rgba(39, 32, 72, 0) 100%);
-    --blur-backdrop-filter: blur(10px);
-    --blur-webkit-backdrop-filter: blur(10px);
+    --cloud-gray: #B0BEC5;
+    --text-color: #D6DCE0;
+    --sun-yellow: #FFD54F;
+    --rain-blue: #0288D1;
+    --storm-purple: #5E35B1;
+    --snow-white: #F5F5F5;
+    --night-navy: #263238;
+    --temperature-red: #E53935;
+    --temperature-blue: #1E88E5;
 }
 
 * {
@@ -14,14 +18,10 @@
 }
 
 body {
-    background: #226BA3 ;
-    background: linear-gradient(49deg,rgba(34, 107, 163, 1) 23%, rgba(89, 183, 255, 1) 100%);
     position: relative;
     margin: 0;
     padding: 0;
-    height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* body div.first_background_image,
@@ -53,28 +53,27 @@ body div.second_background_image {
 
 
 section.container {
-    height: 100vh;
-    display: grid;
-    grid-template-rows: 3fr 1fr;
-    overflow: hidden;
     position: relative;
 }
 
 section.container main.general_look {
+    position: sticky;
     justify-self: center;
     width: 80%;
     height: fit-content;
     text-align: center;
-    color: var(--white-color);
     display: flex;
     flex-direction: column; 
     border-radius: 8px;
     padding: 4px 14px;
-    margin-top: 20px;
+    margin: 20px 0;
 }
 
 section.container main.general_look h2 {
-    font-size: 36px;
+    color: var(--text-color);
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin: 10px 0;
 }
 
 section.container main.general_look p.tempreature {
@@ -82,135 +81,104 @@ section.container main.general_look p.tempreature {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    color: var(--text-color);
+
 }
 
 section.container main p.tempreature span:not(:last-of-type) {
-    font-size: 45px;
+    font-size: 3.2rem;
 }
 
 section.container main p.tempreature span:last-of-type {
     font-size: 22px;
 }
 
+section.container main.general_look span.icon i {
+    font-size: 1.6rem;
+}
+
+section.container main.general_look span.icon.sunny {
+    color: var(--sun-yellow);
+}
+
+section.container main.general_look span.icon.cloud-gray {
+    color: var(--text-color);
+}
+
 
 
 nav#forcast_details {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    touch-action: pan-x;
-    user-select: none;
+    position: relative;
     width: 100%;
-    height: 600px;
+    height: auto;
     padding: 12px 0;
-    border-top: 1px solid rgba(145, 115, 198, 1);
-    border-top-left-radius: 42px;
-    border-top-right-radius: 42px;
     z-index: 100;
     overflow-x: hidden;
-    overflow-y: hidden;
-    /* scroll-behavior: smooth; */
-    background: rgba(0,0,0,0.6);
-    transition: height 0s linear;
-}
-
-
-
-nav#forcast_details.open {
-    height: 100%;
-}
-
-nav#forcast_details div.resizeable_handle {
-    width: 100%;
-    height: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 8px;
-    cursor: grab;
-    padding: 8px 0;
-}
-
-nav#forcast_details div.resizeable_handle i {
-    font-size: 3em;
-    color: var(--white-color);
-}
-
-nav #forcast_type {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    border-bottom: 1px solid var(--light-color);
-    padding: 6px 0;
-}
-
-nav #forcast_type h3 {
-    margin: 0;
-    color: var(--light-color);
-}
-
-nav #forcast_type h3.active {
-    box-shadow: 0px 10px 10px -6px var(--light-color);
-}
-
-nav#forcast_details #hourly_forcast {
-    width: 100%;
-    height: 20%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    gap: 5px;
-    overflow-x: auto;
+    overflow-y: auto;
     scroll-behavior: smooth;
-    padding: 12px 8px;
-}
-
-nav #hourly_forcast div {
-    width: calc((100% - 4 * 5px) / 5);
-    display: flex;
-    flex-shrink: 0;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    color: var(--white-color);
-    border: 1px solid var(--light-color);
-    border-radius: 50px;
 }
 
 nav div#hourly_details {
-    padding: 12px 26px;
+    padding: 12px;
     overflow-y: auto;
     scroll-behavior: smooth;
     height: auto;
-    
 }
 
 nav div#air_quality {
-    color: var(--white-color);
-    padding: 4px 12px;
+    background: rgb(60 60 255 / 14%);
+    backdrop-filter: blur(12px); /* glass blur */
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    color: var(--text-color);
+    padding: 4px 12px 8px;
     border-radius: 14px;
+    font-size: 1.2rem;
+}
+
+nav div#air_quality #measure {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 8px;
+    background: #2E7D32;
+    background: linear-gradient(90deg,rgba(46, 125, 50, 1) 0%, rgba(251, 192, 45, 1) 50%, rgba(211, 47, 47, 1) 100%);
+    border-radius: 4px;
+}
+
+nav div#air_quality #measure span {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--white-color);
+    border: 1px solid var(--light-color);
 }
 
 nav div#hourly_details div.container {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    padding: 12px 4px;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px;
+    padding: 12px 0;
+    overflow: hidden;
 }
 
 nav div#hourly_details div.container section {
-    position: relative;
-    width: 100%;
     flex-shrink: 0;
-    color: var(--white-color);
-    padding: 4px 6px;
-    border: 1px solid var(--light-color);
+    color: var(--text-color);
+    background: rgb(60 60 255 / 14%);; /* frosted glass layer */
+    backdrop-filter: blur(12px); /* glass blur */
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    padding: 4px 12px;
     border-radius: 14px;
+    font-size: 1.2rem;
+    font-weight: lighter;
+    letter-spacing: 1.2px;
+    word-spacing: 1.2px;
 }
 
 section#pressure div.pressure_circle {
@@ -224,9 +192,9 @@ section#pressure div.pressure_circle {
     flex-direction: column;
     justify-content: end;
     align-items: center;
-    border-top: 10px dashed var(--light-color);
-    border-right: 10px dashed var(--light-color);
-    border-left: 10px dashed var(--light-color);
+    border-top: 10px dashed var(--snow-white);
+    border-right: 10px dashed var(--snow-white);
+    border-left: 10px dashed var(--snow-white);
     border-bottom: 10px dashed transparent;
 }
 
@@ -236,7 +204,7 @@ section#pressure div.pressure_circle span.meassure {
     left: 50%;
     width: 10px;
     height: 40%;
-    background-color: var(--white-color);
+    background-color: var(--snow-white);
     border-radius: 8px;
     transform-origin: center center;
 }
@@ -276,7 +244,7 @@ nav section#wind .wind_circle {
     width: 100px;
     height: 100px;
     position: relative;
-    border: 3px solid var(--light-color);
+    border: 3px solid var(--cloud-gray);
     border-radius: 50%;
     display: flex;
     flex-wrap: wrap;
@@ -324,7 +292,7 @@ nav section#wind .wind_circle::after {
     display: flex;
     justify-content: center;
     z-index: 2;
-    border: 8px dotted var(--light-color);
+    border: 6px dotted var(--snow-white);
 }
 
 nav section#wind .wind_circle .arrow {
@@ -358,16 +326,17 @@ nav section#wind .wind_circle .arrow::after {
 footer {
     z-index: 101;
     width: 100%;
-    height: 10vh;
+    height: 60px;
     padding: 10px 25px;
-    margin-bottom: -5px;
     align-self: end;
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    transition: opacity 1s ease-in-out;
+    background: rgba(255, 255, 255, 0.1); /* frosted glass layer */
+    backdrop-filter: blur(12px); /* glass blur */
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
 }
 
 
@@ -381,21 +350,21 @@ footer i.clicked {
 }
 
 div#weather_details {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     width: 0;
     height: 100%;
     opacity: 0;
-    background: #226BA3 ;
-    background: linear-gradient(49deg,rgba(34, 107, 163, 1) 23%, rgba(89, 183, 255, 1) 100%);
-    color: var(--white-color);
+    /* background: #226BA3 ;
+    background: linear-gradient(49deg,rgba(34, 107, 163, 1) 23%, rgba(89, 183, 255, 1) 100%); */
+    color: var(--cloud-gray);
     z-index: 10000;
     padding: 4px 16px;
     overflow-x: hidden;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-    transition: all 1s ease-in-out;   
+    /* overflow-y: scroll; */
+    /* scroll-behavior: smooth; */
+    transition: all 0.5s ease-in-out;   
     grid-area: forcast_details;
 }
 
@@ -407,13 +376,13 @@ div#weather_details {
 }
 
 div#weather_details.show {
-    width: 100%;
     opacity: 1;
+    width: 100%;
 }
 
 /* Designing the scroll bar for the weather details page */
 ::-webkit-scrollbar {
-    width: 4px;
+    width: 2px;
 }
 
 ::-webkit-scrollbar-track {
@@ -422,6 +391,7 @@ div#weather_details.show {
 }
 
 ::-webkit-scrollbar-thumb {
+    width: 2px;
     background: var(--light-color);
     border-radius: 10px;
 }
@@ -456,9 +426,9 @@ div#weather_details main input[type="search"] {
     padding: 10px 8px;
     border-radius: 8px;
     border: none;
-    background-color: #ffffff;
-    color: black;
-    font-size: 22px;
+    background-color: var(--cloud-gray);
+    color: var(--night-navy);
+    font-size: 26px;
 }
 
 div#weather_details main input:focus {
@@ -486,15 +456,16 @@ div#weather_details ul li.city {
     -webkit-backdrop-filter: blur(12px); /* Safari support */
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    color: #ffffff;
+    color: var(--cloud-gray);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1.1px;
     border-radius: 14px;
     transform: translateX(120%);
-    transition: transform 0.8s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: transform 0.3s linear, box-shadow 0.3s ease-in-out;
 }
 
 div#weather_details ul li.city.clicked {
-    box-shadow: 1px 3px 5px 0px black;
+    box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.6);
 }
 
 div#weather_details ul li.city div:last-of-type {
@@ -521,26 +492,27 @@ div#weather_details ul li.city span {
     text-align: right;
 }
 
-
+/* 
 .general_look,
 #hourly_details .container section, 
 footer,
 #weather_details,
 div#air_quality {
-    background: rgba(255, 255, 255, 0.1); /* frosted glass layer */
-    backdrop-filter: blur(12px); /* glass blur */
-    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px); 
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     color: #ffffff;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
+} */
 
 
 /* Desktop design */
 
 @media (min-width: 480px) {    
     section.container {
+        display: grid !important;
         position: relative;
         grid-template-areas: 
         "general_look forcast_details"
